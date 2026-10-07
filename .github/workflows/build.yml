@@ -1,0 +1,31 @@
+name: APK Derle
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodu cek
+        uses: actions/checkout@v4
+
+      - name: Java 17 kur
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Android SDK kur
+        uses: android-actions/setup-android@v3
+
+      - name: APK derle
+        run: gradle assembleDebug --no-daemon
+
+      - name: APK yukle
+        uses: actions/upload-artifact@v4
+        with:
+          name: sesli-test-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
