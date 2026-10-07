@@ -34,11 +34,16 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val anaLayout = LinearLayout(this).apply {
+        // Ana çerçeve (üst üste yerleştirme)
+        val anaLayout = FrameLayout(this).apply {
+            setBackgroundColor(Color.parseColor("#1a1a2e"))
+        }
+
+        // Üst kısımdaki yazılar için dikey düzen
+        val ustLayout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
-            setPadding(50, 100, 50, 50)
-            setBackgroundColor(Color.parseColor("#1a1a2e"))
+            setPadding(50, 150, 50, 50)
         }
 
         durumYazisi = TextView(this).apply {
@@ -46,12 +51,27 @@ class MainActivity : Activity() {
             textSize = 18f
             setTextColor(Color.parseColor("#aaaaaa"))
             gravity = Gravity.CENTER
-            setPadding(0, 0, 0, 80)
+            setPadding(0, 0, 0, 60)
         }
 
+        sonucYazisi = TextView(this).apply {
+            text = ""
+            textSize = 22f
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
+            setPadding(0, 40, 0, 0)
+        }
+
+        ustLayout.addView(durumYazisi)
+        ustLayout.addView(sonucYazisi)
+
+        // Kırmızı yuvarlak buton - ekranın altına sabitlenmiş
         buton = View(this).apply {
             val boyut = 400
-            layoutParams = FrameLayout.LayoutParams(boyut, boyut)
+            layoutParams = FrameLayout.LayoutParams(boyut, boyut).apply {
+                gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+                bottomMargin = 120
+            }
             background = GradientDrawable().apply {
                 shape = GradientDrawable.OVAL
                 setColor(Color.parseColor("#e53935"))
@@ -60,19 +80,11 @@ class MainActivity : Activity() {
             isClickable = true
         }
 
-        sonucYazisi = TextView(this).apply {
-            text = ""
-            textSize = 22f
-            setTextColor(Color.WHITE)
-            gravity = Gravity.CENTER
-            setPadding(0, 100, 0, 0)
-        }
-
-        anaLayout.addView(durumYazisi)
+        anaLayout.addView(ustLayout)
         anaLayout.addView(buton)
-        anaLayout.addView(sonucYazisi)
         setContentView(anaLayout)
 
+        // İzin kontrolü
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
             != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
