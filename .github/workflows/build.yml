@@ -19,10 +19,17 @@ jobs:
           java-version: '17'
 
       - name: Android SDK kur
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+
+      - name: Gerekli SDK paketlerini kur
+        run: |
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+
+      - name: Gradle wrapper izni ver
+        run: chmod +x ./gradlew || true
 
       - name: APK derle
-        run: gradle assembleDebug --no-daemon
+        run: ./gradlew assembleDebug --no-daemon
 
       - name: APK yukle
         uses: actions/upload-artifact@v4
