@@ -18,6 +18,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Gradle kur
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
       - name: Android SDK kur
         uses: android-actions/setup-android@v4
 
@@ -25,11 +30,8 @@ jobs:
         run: |
           sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
-      - name: Gradle wrapper izni ver
-        run: chmod +x ./gradlew || true
-
       - name: APK derle
-        run: ./gradlew assembleDebug --no-daemon
+        run: gradle assembleDebug --no-daemon
 
       - name: APK yukle
         uses: actions/upload-artifact@v4
